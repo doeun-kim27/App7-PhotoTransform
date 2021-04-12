@@ -28,10 +28,14 @@ triedel@utexas.edu
   Brief Description of Goal of Code:
 In this App7, it will let users to take a picture and upload an image to the canvas.
 (This image will be uploaded, transformed, and displayed on the canvas)
+In addition, it will have two canvas page where:
+- Where when the user loads an image, the first canvas will have unaltered image loaded
+- And second canvas will display blue color of an image
  
   Known Issues:
 This will be an useful tool for users to upload their images.
 If this is incorporated into Diagnosis App, users can easily upload their photos of the symptoms and it will be halpful to give more precise diagnosis.
+In addition, it can be also used for color blind diagnosis for patients. 
 -->
 
  <head>
@@ -43,6 +47,8 @@ If this is incorporated into Diagnosis App, users can easily upload their photos
   <script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
   <script src="https://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.js"></script>
 
+  
+  
  <script>
   var docMod = document.lastModified; // gets last modified date and time of the index.html file
   console.log("This file last modified  " + docMod); // displays last modified date and time in the javascipt browser console 
@@ -129,6 +135,7 @@ If this is incorporated into Diagnosis App, users can easily upload their photos
  <body>
   <div data-role="page">
     <div data-role="header">
+     
     <h1>Primary Colors</h1></div><!-- /header -->
     <div data-role="content">	
       <h2>Push button to take picture.</h2>
@@ -136,15 +143,27 @@ If this is incorporated into Diagnosis App, users can easily upload their photos
         Press orange button to create or choose image file:
         <input type="file" id="fileInput" STYLE="background-color: #FF6600;">
       </div>
+     
+     
       <div id="messageDisplayArea"></div>
       
       <canvas id="myCanvas" width=600 height=500 style="border:1px solid #d3d3d3;"></canvas>
+     
+      <canvas id="myCanvas2" width=600 height=500 style="border:1px solid #d3d3d3;"></canvas>
+     
       <script> /* This script initiates the cavas and puts the text on the canvas "myCanvas" */
         var canvas = document.getElementById('myCanvas');
         var context = canvas.getContext("2d");
         context.font = '20pt Calibri';
         context.fillStyle = "black";
+        context.fillText("Blue image will go here", 10, 20);
+       
+        var canvas = document.getElementById('myCanvas2');
+        var context = canvas.getContext("2d");
+        context.font = '20pt Calibri';
+        context.fillStyle = "black";
         context.fillText("Original image will go here", 10, 20);
+       
       </script>
 
     </div><!-- /content -->
@@ -153,4 +172,6 @@ If this is incorporated into Diagnosis App, users can easily upload their photos
     </div><!-- /footer -->
   </div><!-- /page -->
  </body>
+ 
+ 
 </html>
