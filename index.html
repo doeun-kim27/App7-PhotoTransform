@@ -108,13 +108,27 @@ In addition, it can be also used for color blind diagnosis for patients.
           drawImageIOSFix(context,img, 0, 0, img.naturalWidth, img.naturalHeight, 0, 0, 600, 500);
 
           /*  +++++++++++++++ BEGIN IMAGE PROCESSING +++++++++++++++ */
+         drawImageIOSFix(context2,img, 0, 0, img.naturalWidth, img.naturalHeight, 0, 0, 600, 500);
+         
+        /*  function drawImage(imageObj) {
+          var canvas2 = document.getElementById('myCanvas');
+          var context = canvas.getContext('2d');
+          var imageX = 69;
+          var imageY = 50;
+          
+          context2.drawImage(imageObj, imageX, imageY);
+         }
+       
+         
+         var imageObj = new Image();
+         imageObj.onload = function() {
+          drawImage(this); 
+         };*/
+         
           /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
-
           /* PUT ANY CHANGES TO THE JAVASCRIPT HERE  */
           
-          
-          
-          
+        
         } // end of img.onload
         
         img.src = reader.result;
@@ -156,13 +170,13 @@ In addition, it can be also used for color blind diagnosis for patients.
         var context = canvas.getContext("2d");
         context.font = '20pt Calibri';
         context.fillStyle = "black";
-        context.fillText("Blue image will go here", 10, 20);
+        context.fillText("Original image will go here", 10, 20);
        
-        var canvas = document.getElementById('myCanvas2');
-        var context = canvas.getContext("2d");
+        var canvas2 = document.getElementById('myCanvas2');
+        var context2 = canvas2.getContext("2d");
         context.font = '20pt Calibri';
         context.fillStyle = "black";
-        context.fillText("Original image will go here", 10, 20);
+        context.fillText("Blue image will go here", 10, 20);
        
       </script>
 
