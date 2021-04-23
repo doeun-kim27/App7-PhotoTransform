@@ -112,51 +112,31 @@ In addition, it can be also used for color blind diagnosis for patients.
          //a code that prints out an image to canvas 1
           drawImageIOSFix(context,img, 0, 0, img.naturalWidth, img.naturalHeight, 0, 0, 600, 500);
          
-         //where my new edit starts (trial)
-
-         
-         //trying to access the pixels of an image
-         var imageData = content.getImageData();
-         var data = imageData.data;
-         
-         //iterate over all pixels
-         for(var i=0, n=data.length; i < n; i += 4){
-          var green = data[i + 1];
-          var blue = data[i + 2];
-          var alpha = data[i + 3];
-         }
-         //picking out pixel data from x, y coordinate
-         var x = 20;
-         var y = 20;
-         var red = data[((imageWidth * y) + x) * 4];
-         var green = data[((imageWidth * y) + x) * 4 + 1];
-         var blue = data[((imageWidth * y) + x) * 4 + 2];
-         var alpha = data[((imageWidth * y) + x) * 4 + 3];
-        
-        // iterate over all pixels based on x and y coordinate
-         for(var y = 0; y < imageHeight; y++) {
-        // loop through each column
-         for(var x = 0; x < imageWidth; x++) {
-         var red = data[((imageWidth * y) + x) * 4];
-         var green = data[((imageWidth * y) + x) * 4 + 1];
-         var blue = data[((imageWidth * y) + x) * 4 + 2];
-         var alpha = data[((imageWidth * y) + x) * 4 + 3];
-          }
-        }
-      }
-         var blueimg = new Image();
-         blueimg.onload = function() {
-          drawImage(this);
-         };
-        }
-
-         //end of my new edits
          
          
          
-          /*  +++++++++++++++ BEGIN IMAGE PROCESSING +++++++++++++++ */
-         //a code that prints out an image to canvas 2
-         drawImageIOSFix(context2,blueimg, 0, 0, img.naturalWidth, img.naturalHeight, 0, 0, 600, 500);
+         //CODE FOR BLUE IMAGE in the second canvas
+        var canvas2 = document.getElementById('myCanvas2');
+        var context2 = canvas2.getContext("2d");
+         
+        context2.font = '20pt Calibri';
+        context2.fillStyle = "black";
+        context2.fillText("Blue image will go here", 10, 20);
+       
+       var imageData = context.getImageData(0, 0, 600, 500);
+       var data = imageData.data;
+       
+       //code for changing the second canvas to the blue image
+       for(var i = 0; n = data.length; i <n; i += 4) {
+        data[i] = 0; //this means that data for red and green will be set to zero
+        data[i+1] = 0;
+       }
+       
+       context2.putImageData(imageData, 0, 0);
+         
+         
+       
+        // drawImageIOSFix(context2,blueimg, 0, 0, img.naturalWidth, img.naturalHeight, 0, 0, 600, 500);
         
          
           /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++ */          
@@ -176,9 +156,6 @@ In addition, it can be also used for color blind diagnosis for patients.
  } // end of the window.onload function
  </script>
  <!----------------------------------------------------------------------this is where script ends----------------------------------------------------------------------->
-  
-  
-  
  </head>
 
  <body>
@@ -206,16 +183,12 @@ In addition, it can be also used for color blind diagnosis for patients.
      </script>
      
       <canvas id="myCanvas2" width=600 height=500 style="border:1px solid #d3d3d3;"></canvas>
-     
       <script> /* This script initiates the cavas and puts the text on the canvas "myCanvas" */
-
-       
         var canvas2 = document.getElementById('myCanvas2');
         var context2 = canvas2.getContext("2d");
         context2.font = '20pt Calibri';
         context2.fillStyle = "black";
         context2.fillText("Blue image will go here", 10, 20);
-       
       </script>
 
     </div><!-- /content -->
