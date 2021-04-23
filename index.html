@@ -98,14 +98,20 @@ In addition, it can be also used for color blind diagnosis for patients.
    
     /* if (file.type.match(imageType)) checks that the selected file is indeed an image. */
     if (file.type.match(imageType)) {
-      /* new FileReader(); and reader.onload start some kind of file reading process in javaScript. I do not understand why this is necessary although it may simply slow things down to let the image load. */
+      
+     /* new FileReader(); and reader.onload start some kind of file reading process in javaScript. I do not understand why this is necessary although it may simply slow things down to let the image load. */
       var reader = new FileReader();
-      reader.onload = function(e) {
+     
+     //start reader.onload function (property contains an event handler executed when the load event is fired)
+      reader.onload = function(e) { 
         /* messageDisplayArea.innerHTML not needed but allows you to send a message at this point in the program. */
+       //displaying a text on the messageDisplayArea page
         messageDisplayArea.innerHTML = "You picked an image!";
         /* new Image() and img.onload start some kind of new image creation process in javaScript. I do not understand why this is necessary although it may simply slow things down to let the image load. */
 
+       //setting an image as a variable
         var img = new Image();
+       //start img.onload function
         img.onload = function() {
           /*This finally draws the image onto the first drawing canvas. The specific canvas is referred to by "context". This is established down in the HTML part of the file just under the first <canvas> tag. If we weren't worried about fixing an iPhone bug we would use context.drawImage(image, 0, 0, img.naturalWidth, img.naturalHeight, 0, 0, 600, 500) instead of drawImageIOSFix */
         
@@ -117,28 +123,19 @@ In addition, it can be also used for color blind diagnosis for patients.
          
          //CODE FOR BLUE IMAGE in the second canvas
         var canvas2 = document.getElementById('myCanvas2');
-        var context2 = canvas2.getContext("2d");
-         
-        context2.font = '20pt Calibri';
-        context2.fillStyle = "black";
-        context2.fillText("Blue image will go here", 10, 20);
+        var context2 = canvas2.getContext('2d');
        
-       var imageData = context.getImageData(0, 0, 600, 500);
+       var imageData = context.getImageData(0, 0, 600, 500); //this will be called later
        var data = imageData.data;
        
        //code for changing the second canvas to the blue image
-       for(var i = 0; n = data.length; i <n; i += 4) {
-        data[i] = 0; //this means that data for red and green will be set to zero
-        data[i+1] = 0;
+       //this for loop help this to repreat and continue this through all pixels
+       for(var i = 0, n = data.length; i < n; i += 4) {  
+        data[i] = 0; //data for red and green will be set to zero
+        data[i + 1] = 0;
        }
-       
-       context2.putImageData(imageData, 0, 0);
-         
-         
-       
-        // drawImageIOSFix(context2,blueimg, 0, 0, img.naturalWidth, img.naturalHeight, 0, 0, 600, 500);
+         context2.putImageData(imageData, 0, 0);
         
-         
           /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++ */          
         
         } // end of img.onload 
