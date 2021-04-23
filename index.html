@@ -130,10 +130,16 @@ In addition, it can be also used for color blind diagnosis for patients.
        
        //code for changing the second canvas to the blue image
        //this for loop help this to repreat and continue this through all pixels
-       for(var i = 0, n = data.length; i < n; i += 4) {  
+       for(var i = 0, n = data.length; i < n; i += 4) { 
+        //var red =  = data[i + 1];
+        //var blue = data[i + 2];
+        //var alpha = data[i + 3];
+        }
+
         data[i] = 0; //data for red and green will be set to zero
         data[i + 1] = 0;
        }
+      
          context2.putImageData(imageData, 0, 0);
         
           /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++ */          
