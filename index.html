@@ -52,32 +52,33 @@ In addition, it can be also used for color blind diagnosis for patients.
  <script>
   var docMod = document.lastModified; // gets last modified date and time of the index.html file
   console.log("This file last modified  " + docMod); // displays last modified date and time in the javascipt browser console 
+  console.log("This message will be displayed on the Javascript debugging console"); //this message will be shown on the javascript debugging console
 
-/* detectVerticalSquash & drawImageIOSFix = are functions that are critical due to a flaw in the iPhone camera software that squishes any photos displayed on an HTML5 canvas element. https://github.com/stomita/ios-imagefile-megapixel*/
- function detectVerticalSquash(img) {
-  var iw = img.naturalWidth, ih = img.naturalHeight;
-  var canvas = document.createElement('canvas');
-  canvas.width = 1;
-  canvas.height = ih;
-  var ctx = canvas.getContext('2d');
-  ctx.drawImage(img, 0, 0);
-  var data = ctx.getImageData(0, 0, 1, ih).data;
-  var sy = 0;
-  var ey = ih;
-  var py = ih;
-  while (py > sy) {
-   var alpha = data[(py - 1) * 4 + 3];
-   if (alpha === 0) {
-    ey = py;
-   } 
-   else {
-    sy = py;
+ /* detectVerticalSquash & drawImageIOSFix = are functions that are critical due to a flaw in the iPhone camera software that squishes any photos displayed on an HTML5 canvas element. https://github.com/stomita/ios-imagefile-megapixel*/
+  function detectVerticalSquash(img) {
+   var iw = img.naturalWidth, ih = img.naturalHeight;
+   var canvas = document.createElement('canvas');
+   canvas.width = 1;
+   canvas.height = ih;
+   var ctx = canvas.getContext('2d');
+   ctx.drawImage(img, 0, 0);
+   var data = ctx.getImageData(0, 0, 1, ih).data;
+   var sy = 0;
+   var ey = ih;
+   var py = ih;
+   while (py > sy) {
+    var alpha = data[(py - 1) * 4 + 3];
+    if (alpha === 0) {
+     ey = py;
+    } 
+    else {
+     sy = py;
+    }
+    py = (ey + sy) >> 1;
    }
-   py = (ey + sy) >> 1;
-  }
-  var ratio = (py / ih);
-  return (ratio===0)?1:ratio;
- }
+   var ratio = (py / ih);
+   return (ratio===0)?1:ratio;
+  } //end of function, detectVerticalSquiash (img)
 
   
  function drawImageIOSFix(ctx, img, sx, sy, sw, sh, dx, dy, dw, dh) {
@@ -88,9 +89,14 @@ In addition, it can be also used for color blind diagnosis for patients.
   
   
 /* window.onload necessary to keep javascripts from running before the app gets a chance to load entirely. */
- window.onload = function() {
+/*onload property: functionRef is the handler function to be called when the window’s load event fires/ he load event fires at the end of the document loading process
+Source: https://developer.mozilla.org/en-US/docs/Web/API/GlobalEventHandlers/onload */
+window.onload = function() {
+  //this code is saving an fileInput from user to a variable names 'fileInput'. The specific code is on the HTML below: <input type="file" id="fileInput" STYLE="background-color: #FF6600;">
   var fileInput = document.getElementById('fileInput');
+  //this code is for the messageDisplay area that will be above canvas, below the button
   var messageDisplayArea = document.getElementById('messageDisplayArea');
+  
   /* fileInput.addEventListener looks for any change in the <input> tag indicating that the user has selected a file (picture). */
   fileInput.addEventListener('change', function(e) {
     var file = fileInput.files[0];
@@ -114,37 +120,41 @@ In addition, it can be also used for color blind diagnosis for patients.
        //start img.onload function
         img.onload = function() {
           /*This finally draws the image onto the first drawing canvas. The specific canvas is referred to by "context". This is established down in the HTML part of the file just under the first <canvas> tag. If we weren't worried about fixing an iPhone bug we would use context.drawImage(image, 0, 0, img.naturalWidth, img.naturalHeight, 0, 0, 600, 500) instead of drawImageIOSFix */
-        
          //a code that prints out an image to canvas 1
           drawImageIOSFix(context,img, 0, 0, img.naturalWidth, img.naturalHeight, 0, 0, 600, 500);
+         //The corresponding naturalHeight method returns the natural height of the image. (source: https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/naturalWidth)
          
-         
-         
-         
+
          //CODE FOR BLUE IMAGE in the second canvas
-        var canvas2 = document.getElementById('myCanvas2');
-        var context2 = canvas2.getContext("2d");
+        var canvas2 = document.getElementById('myCanvas2'); //this is calling a canvas id "myCanvas2" which is stated in the HTML below
+        var context2 = canvas2.getContext("2d"); //HTMLCanvasElement.getContext() method returns a drawing context on the canvas, or null if the context identifier is not supported, or the canvas has already been set to a different context mode.
        
        var imageData = context.getImageData(0, 0, 600, 500); //this will be called later
-       var data = imageData.data;
+       var data = imageData.data; //The ImageData object represents the underlying pixel data of an area of a canvas object.
        
        //code for changing the second canvas to the blue image
-       //this for loop help this to repreat and continue this through all pixels
-       for(var i = 0, n = data.length; i < n; i += 4) { 
-        /*var red =  = data[i + 1];
-        var blue = data[i + 2];
-        var alpha = data[i + 3];*/
+       //this for loop help this to repreat and continue this through all pixels and bring down the intensity of green and red light into zero, while remaining blue intensity
+       for(var i = 0, n = data.length; i < n; i += 4) {  //in this for loop, i will begin with 0, and it will repeat through nth data length unless i is less than n
         
         data[i] = 0; //data for green will be set to zero
         data[i + 1] = 0; //data for red will be set to zero
+        /*this can be also written for brightness as:
+        var brightness = 0.34 * data[i] + 0.5 * data[i + 1] + 0.16 * data[i + 2];
+          // red
+          data[i] = brightness;
+          // green
+          data[i + 1] = brightness;
+          // blue
+          data[i + 2] = brightness;
+        }*/
        }
          
-         context2.putImageData(imageData, 0, 0);
-        
-          /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++ */          
+         context2.putImageData(imageData, 0, 0); //in this code, now it is finally putting and applying the fuction above to the image that will be displayed on the second canvas. THrough this code, the intensity of Red and Green of the image for second canvas will be altered.
         
         } // end of img.onload 
+       
         img.src = reader.result;
+       //The readAsDataURL method is used to read the contents of the specified Blob or File. (source: https://developer.mozilla.org/en-US/docs/Web/API/FileReader/readAsDataURL)
       } //  end of reader.onload
       
       reader.readAsDataURL(file);
@@ -153,6 +163,7 @@ In addition, it can be also used for color blind diagnosis for patients.
     {
       // this is what happens if the orignial file selected is not an image file
       messageDisplayArea.innerHTML = "File not supported!"
+     
     } // end of the else statement if file in NOT an image
   }); // end of the fileInput.addEventListener function
  } // end of the window.onload function
@@ -164,33 +175,41 @@ In addition, it can be also used for color blind diagnosis for patients.
   <div data-role="page">
     <div data-role="header">
      
-    <h1>Primary Colors</h1></div><!-- /header -->
+     <!-- /header -->
+    <h1>Primary Colors; App7- Phototransform</h1></div>
     <div data-role="content">	
+     
+       <!--this is the text that will be displayed on the content section below the main header and above the button-->
       <h2>Push button to take picture.</h2>
       <div>
+        <!--in this code, it is allowing user to upload an image file and ONLY iamge file will be allowed-->
         Press orange button to create or choose image file:
         <input type="file" id="fileInput" STYLE="background-color: #FF6600;">
       </div>
      
-     
+     <!--this is a messageDisplayArea where it will say either "You picked an image!" if selected right image file, OR "File not supported!" when file choosen is NOT an image file.
+     the following code is on line 115 and 165-->
       <div id="messageDisplayArea"></div>
       
+     
+     <!--this is a HTML and script code for setting up 1st canvas page with width of 600 and heitht of 500. This will be a canvas that displays the normal colored image-->
       <canvas id="myCanvas" width=600 height=500 style="border:1px solid #d3d3d3;"></canvas>
       <script>
-       var canvas = document.getElementById('myCanvas');
-       var context = canvas.getContext("2d");
-       context.font = '20pt Calibri';
-       context.fillStyle = "black";
-       context.fillText("Original image will go here", 10, 20);
+       var canvas = document.getElementById('myCanvas'); //in this code, we are calling 'myCanvas' ID from HTML code above, and saving it to variable named canvas
+       var context = canvas.getContext("2d"); //The CanvasRenderingContext2D interface, part of the Canvas API, provides the 2D rendering context for the drawing surface of a <canvas> element
+       context.font = '20pt Calibri'; //this code is for the text that will be displayed on cavas before image is choosen. context.font = '20pt Calibri' is for the font style
+       context.fillStyle = "black"; //this code is for the color of the text
+       context.fillText("Original image will go here", 10, 20); //draws a text string at the specified coordinates, filling the string's characters with the current fillStyle
      </script>
      
+      <!--this is a HTML and script code for setting up 2nd canvas page with width of 600 and heitht of 500. This will be a canvas that displays blue image with all red and green intensity setted to zero-->
       <canvas id="myCanvas2" width=600 height=500 style="border:1px solid #d3d3d3;"></canvas>
       <script> /* This script initiates the cavas and puts the text on the canvas "myCanvas" */
-        var canvas2 = document.getElementById('myCanvas2');
-        var context2 = canvas2.getContext("2d");
-        context2.font = '20pt Calibri';
-        context2.fillStyle = "black";
-        context2.fillText("Blue image will go here", 10, 20);
+        var canvas2 = document.getElementById('myCanvas2'); //in this code, we are calling 'myCanvas2' ID from HTML code above, and saving it to variable named canvas
+        var context2 = canvas2.getContext("2d");  //The CanvasRenderingContext2D interface, part of the Canvas API, provides the 2D rendering context for the drawing surface of a <canvas> element
+        context2.font = '20pt Calibri';  //this code is for the text that will be displayed on cavas before image is choosen. context.font = '20pt Calibri' is for the font style
+        context2.fillStyle = "black"; //this code is for the color of the text
+        context2.fillText("Blue image will go here", 10, 20); //draws a text string at the specified coordinates, filling the string's characters with the current fillStyle
       </script>
 
     </div><!-- /content -->
